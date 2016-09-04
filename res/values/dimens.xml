@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+	<dimen name="title_height">40dp</dimen>
+	<dimen name="title_text">20sp</dimen>
+	<dimen name="title_btn_padding">6dp</dimen>
+	<dimen name="title_btm_gap">5dp</dimen>
+
+	<dimen name="grid_height">150dp</dimen>
+	<dimen name="grid_hor_gap">5dp</dimen>
+	<dimen name="grid_ver_gap">5dp</dimen>
+	<dimen name="grid_select_size">30dp</dimen>
+	<dimen name="grid_tag_height">30dp</dimen>
+	<dimen name="grid_tag_padding">5dp</dimen>
+	<dimen name="grid_name_text">13sp</dimen>
+	<dimen name="grid_num_text">10sp</dimen>
+	<dimen name="grid_sort_size">20dp</dimen>
+
+	<dimen name="sort_grid_height">60dp</dimen>
+	<dimen name="sort_grid_divider">2dp</dimen>
+	<dimen name="sort_grid_gap">2dp</dimen>
+	<dimen name="sort_grid_gap_big">10dp</dimen>
+	<dimen name="sort_grid_text">20sp</dimen>
+
+	<dimen name="menu_height">52dp</dimen>
+	<dimen name="menu_btn_padding">10dp</dimen>
+	<dimen name="menu_btn_gap">5dp</dimen>
+	<dimen name="menu_text">15sp</dimen>
+
+	<dimen name="dialog_width">800px</dimen>
+	<dimen name="dialog_height">600px</dimen>
+	<dimen name="dialog_content_padding">10dp</dimen>
+	<dimen name="dialog_content_text">20sp</dimen>
+	<dimen name="dialog_gap">2dp</dimen>
+	<dimen name="dialog_btn_height">40dp</dimen>
+	<dimen name="dialog_btn_text">20sp</dimen>
+
+	<dimen name="downlist_grid_width">160dp</dimen>
+	<dimen name="downlist_grid_height">50dp</dimen>
+	<dimen name="downlist_grid_divider">2dp</dimen>
+	<dimen name="downlist_grid_icon">26dp</dimen>
+	<dimen name="downlist_grid_text">15sp</dimen>
+	<dimen name="downlist_grid_gap">5dp</dimen>
+
+	<dimen name="detail_grid_divider">2dp</dimen>
+	<dimen name="detail_grid_height">50dp</dimen>
+	<dimen name="detail_grid_left_width">80dp</dimen>
+	<dimen name="detail_grid_gap">5dp</dimen>
+	<dimen name="detail_grid_text">16sp</dimen>
+
+</resources>

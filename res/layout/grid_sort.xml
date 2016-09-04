@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="@dimen/sort_grid_height"
+	android:background="@color/sort_grid_divider"
+	android:orientation="vertical">
+	
+    <LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/sort_grid_bg"
+		android:layout_marginTop="@dimen/sort_grid_divider"
+		android:layout_marginBottom="@dimen/sort_grid_divider"
+		android:orientation="horizontal">
+	
+		<TextView
+			android:id="@+id/tv_text"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:paddingLeft="@dimen/sort_grid_gap_big"
+			android:paddingRight="@dimen/sort_grid_gap_big"
+			android:gravity="left|center_vertical"
+			android:textSize="@dimen/sort_grid_text"
+			android:textColor="@color/sort_grid_text" />
+	
+		<ImageView
+			android:id="@+id/iv_direct"
+			android:layout_width="@dimen/sort_grid_height"
+			android:layout_height="match_parent"
+			android:padding="@dimen/sort_grid_gap_big"
+			android:background="@drawable/btn_black_bg"
+			android:scaleType="centerInside" />
+	
+	</LinearLayout>
+
+</LinearLayout>

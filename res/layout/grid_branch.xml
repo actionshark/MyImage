@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/grid_bg">
+
+	<ImageView
+		android:id="@+id/iv_thum"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/grid_height"
+		android:scaleType="centerCrop" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/grid_tag_height"
+		android:layout_alignParentBottom="true"
+		android:orientation="horizontal"
+		android:background="@color/grid_tag"
+		android:paddingLeft="@dimen/grid_tag_padding"
+		android:paddingRight="@dimen/grid_tag_padding"
+		android:gravity="center">
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:orientation="vertical"
+			android:gravity="left">
+
+			<TextView
+				android:id="@+id/tv_name"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="4"
+				android:textColor="@color/grid_name"
+				android:textSize="@dimen/grid_name_text" />
+
+			<TextView
+				android:id="@+id/tv_num"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="3"
+				android:textColor="@color/grid_num"
+				android:textSize="@dimen/grid_num_text" />
+
+		</LinearLayout>
+
+		<ImageView
+			android:id="@+id/iv_sort"
+			android:layout_width="@dimen/grid_sort_size"
+			android:layout_height="@dimen/grid_sort_size"
+			android:scaleType="fitXY" />
+
+	</LinearLayout>
+
+	<Button
+		android:id="@+id/btn_mask"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/grid_height"
+		android:background="@drawable/btn_black_bg" />
+
+	<ImageView
+		android:id="@+id/iv_select"
+		android:layout_width="@dimen/grid_select_size"
+		android:layout_height="@dimen/grid_select_size"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentTop="true"
+		android:layout_marginRight="@dimen/grid_hor_gap"
+		android:layout_marginTop="@dimen/grid_ver_gap"
+		android:background="@color/grid_bg"
+		android:scaleType="fitXY" />
+
+</RelativeLayout>

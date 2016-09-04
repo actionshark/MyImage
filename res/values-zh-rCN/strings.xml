@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">我的图片</string>
+
+	<string name="ok">确定</string>
+	<string name="cancel">取消</string>
+	<string name="copy">复制</string>
+	<string name="cut">剪切</string>
+	<string name="delete">删除</string>
+	<string name="refresh">刷新</string>
+	<string name="edit">编辑</string>
+	<string name="share">分享</string>
+	<string name="recent">最近</string>
+
+	<string name="show_hide">显示隐藏</string>
+	<string name="hide_hide">隐藏隐藏</string>
+	<string name="lock_transform">变形限制</string>
+	<string name="unlock_transform">自由变形</string>
+	<string name="show_status">显示状态栏</string>
+	<string name="hide_status">隐藏状态栏</string>
+	<string name="show_title">显示标题栏</string>
+	<string name="hide_title">隐藏标题栏</string>
+	<string name="show_detail">显示详情</string>
+	<string name="hide_detail">隐藏详情</string>
+	<string name="set_as_cover">设为封面</string>
+	<string name="not_as_cover">取消封面</string>
+	<string name="set_top">置顶</string>
+	<string name="cancel_top">取消置顶</string>
+	<string name="set_bottom">置底</string>
+	<string name="cancel_bottom">取消置底</string>
+
+	<string name="sort">排序</string>
+	<string name="sort_title_branch">文件夹排序设置</string>
+	<string name="sort_title_leaf">图片排序设置</string>
+	<string name="sort_index">Sort by index</string>
+	<string name="sort_name">按名字</string>
+	<string name="sort_num">按图片数量</string>
+	<string name="sort_path">按路径</string>
+	<string name="sort_size">按大小</string>
+	<string name="sort_time">按修改时间</string>
+
+	<string name="detail_height">高</string>
+	<string name="detail_modify">修改时间</string>
+	<string name="detail_name">名字</string>
+	<string name="detail_path">路径</string>
+	<string name="detail_size">大小</string>
+	<string name="detail_width">宽</string>
+
+	<string name="msg_nothing_selected">什么都没选！</string>
+	<string name="msg_clip">请进入目标文件夹并粘贴。</string>
+	<string name="msg_paste_nothing">没有东西可粘贴！</string>
+
+	<string name="msg_delete_confirm">删除选中的 %1$d 张图片？</string>
+	<string name="msg_delete_process">正在删除 %1$d 张图片…\n%2$d 项成功\n%3$d 项失败</string>
+	<string name="msg_delete_result">删除完成\n%1$d 项成功\n%2$d 项失败</string>
+
+	<string name="msg_copy_process">正在复制 %1$d 张图片…\n%2$d 项成功\n%3$d 项失败</string>
+	<string name="msg_copy_result">复制完成\n%1$d 项成功\n%2$d 项失败</string>
+
+	<string name="msg_cut_process">正在剪切 %1$d 张图片…\n%2$d 项成功\n%3$d 项失败</string>
+	<string name="msg_cut_result">剪切完成\n%1$d 项成功\n%2$d 项失败</string>
+</resources>

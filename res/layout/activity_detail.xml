@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<RelativeLayout
+		android:id="@+id/rl_title"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/title_height"
+		android:background="@color/title_bg">
+
+		<ImageView
+			android:id="@+id/iv_back"
+			android:layout_width="@dimen/title_height"
+			android:layout_height="@dimen/title_height"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:padding="@dimen/title_btn_padding"
+			android:background="@drawable/btn_black_bg"
+			android:scaleType="centerInside"
+			android:src="@drawable/arrow_left" />
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:textSize="@dimen/title_text"
+			android:textColor="@color/title_text"
+			android:text="@string/app_name" />
+
+
+		<ImageView
+			android:id="@+id/iv_menu"
+			android:layout_width="@dimen/title_height"
+			android:layout_height="@dimen/title_height"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:padding="@dimen/title_btn_padding"
+			android:background="@drawable/btn_black_bg"
+			android:scaleType="centerInside"
+			android:src="@drawable/menu" />
+
+	</RelativeLayout>
+
+	<android.support.v4.view.ViewPager
+		android:id="@+id/vp_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+
+</LinearLayout>

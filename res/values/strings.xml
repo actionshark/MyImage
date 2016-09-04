@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">MyImage</string>
+
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+	<string name="copy">Copy</string>
+	<string name="cut">Cut</string>
+	<string name="delete">Delete</string>
+	<string name="refresh">Refresh</string>
+	<string name="edit">Edit</string>
+	<string name="share">Share</string>
+	<string name="recent">Recent</string>
+
+	<string name="show_hide">Show Hidden</string>
+	<string name="hide_hide">Hide Hidden</string>
+	<string name="lock_transform">Lock Transform</string>
+	<string name="unlock_transform">Unlock Transform</string>
+	<string name="show_status">Show StatusBar</string>
+	<string name="hide_status">Hide StatusBar</string>
+	<string name="show_title">Show TitleBar</string>
+	<string name="hide_title">Hide TitleBar</string>
+	<string name="show_detail">Show Detail</string>
+	<string name="hide_detail">Hide Detail</string>
+	<string name="set_as_cover">Set As Cover</string>
+	<string name="not_as_cover">Not As Cover</string>
+	<string name="set_top">Set Top</string>
+	<string name="cancel_top">Cancel Top</string>
+	<string name="set_bottom">Set Bottom</string>
+	<string name="cancel_bottom">Cancel Bottom</string>
+
+	<string name="sort">Sort</string>
+	<string name="sort_title_branch">Directory Sort Setting</string>
+	<string name="sort_title_leaf">Image Sort Setting</string>
+	<string name="sort_index">Sort by index</string>
+	<string name="sort_name">Sort by name</string>
+	<string name="sort_num">Sort by images number</string>
+	<string name="sort_path">Sort by path</string>
+	<string name="sort_size">Sort by image size</string>
+	<string name="sort_time">Sort by modify time</string>
+
+	<string name="detail_height">Height</string>
+	<string name="detail_modify">Modify</string>
+	<string name="detail_name">Name</string>
+	<string name="detail_path">Path</string>
+	<string name="detail_size">Size</string>
+	<string name="detail_width">Width</string>
+
+	<string name="msg_nothing_selected">Nothing Selected</string>
+	<string name="msg_clip">Please enter target directory and paste.</string>
+	<string name="msg_paste_nothing">Nothing to paste.</string>
+
+	<string name="msg_delete_confirm">Delete Selected %1$d Images?</string>
+	<string name="msg_delete_process">Deleting %1$d Images…\n%2$d succeed\n%3$d failed
+	</string>
+	<string name="msg_delete_result">Delete Ended\n%1$d succeed\n%2$d failed</string>
+
+	<string name="msg_copy_process">Copying %1$d Images…\n%2$d succeed\n%3$d failed
+	</string>
+	<string name="msg_copy_result">Copy Ended\n%1$d succeed\n%2$d failed</string>
+
+	<string name="msg_cut_process">Cutting %1$d Images…\n%2$d succeed\n%3$d failed
+	</string>
+	<string name="msg_cut_result">Cut Ended\n%1$d succeed\n%2$d failed</string>
+</resources>

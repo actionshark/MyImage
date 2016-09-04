@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+	<color name="activity_bg">#000000</color>
+
+	<color name="title_bg">#1470fa</color>
+	<color name="title_text">#ffffff</color>
+
+	<color name="grid_view_bg">#000000</color>
+	<color name="grid_bg">#1470fa</color>
+	<color name="grid_tag">#66000000</color>
+	<color name="grid_name">#ffffff</color>
+	<color name="grid_num">#bbbbbb</color>
+
+	<color name="sort_grid_bg">#1470fa</color>
+	<color name="sort_grid_divider">#000000</color>
+	<color name="sort_grid_text">#ffffff</color>
+
+	<color name="menu_bg">#000000</color>
+	<color name="menu_text">#ffffff</color>
+
+	<color name="dialog_bg">#000000</color>
+	<color name="dialog_content_bg">#1470fa</color>
+	<color name="dialog_content_text">#ffffff</color>
+	<color name="dialog_btn_text">#ffffff</color>
+
+	<color name="downlist_bg">#000000</color>
+	<color name="downlist_grid_text">#ffffff</color>
+
+	<color name="detail_grid_bg">#000000</color>
+	<color name="detail_grid_color">#1470fa</color>
+	<color name="detail_grid_name_text">#ffffff</color>
+	<color name="detail_grid_value_text">#ffffff</color>
+
+</resources>
