@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 
-import kk.myimage.R;
-
 public class ImageUtil {
 	public static final String BRO_THUM_GOT = "image_util_thum_got";
 	public static final String BRO_IMAGE_GOT = "image_util_image_got";
@@ -17,11 +15,8 @@ public class ImageUtil {
 	private static final String[] IMG_SUFFIX = new String[] { ".jpg", ".jpeg",
 			".png", };
 
-	private static int sThumWidth;
-	private static int sThumHeight;
-
-	private static final int MAX_WIDTH = 4096;
-	private static final int MAX_HEIGHT = 4096;
+	private static final int MAX_WIDTH = 1024;
+	private static final int MAX_HEIGHT = 2048;
 
 	private static class BitmapNode {
 		public Bitmap bitmap;
@@ -54,13 +49,6 @@ public class ImageUtil {
 			return size() > IMAGE_CACHE_SIZE;
 		}
 	};
-
-	static {
-		sThumWidth = (AppUtil.getScreenWidth(false) - AppUtil
-				.getDimenInt(R.dimen.grid_hor_gap)) / 2;
-
-		sThumHeight = AppUtil.getDimenInt(R.dimen.grid_height);
-	}
 
 	public static boolean isImage(File file) {
 		String name = file.getName().toLowerCase(Locale.ENGLISH);
@@ -112,10 +100,10 @@ public class ImageUtil {
 								
 							if (selected) {
 								Options options = getOptions(path);
-								int scaleWidth = (options.outWidth + sThumWidth - 1)
-										/ sThumWidth;
-								int scaleHeight = (options.outHeight + sThumHeight - 1)
-										/ sThumHeight;
+								int scaleWidth = (options.outWidth + MAX_WIDTH - 1)
+										/ MAX_WIDTH;
+								int scaleHeight = (options.outHeight + MAX_HEIGHT - 1)
+										/ MAX_HEIGHT;
 								options = new Options();
 								options.inSampleSize = Math.max(scaleWidth, scaleHeight);
 
@@ -172,25 +160,7 @@ public class ImageUtil {
 							}
 								
 							if (selected) {
-								Options oa = getOptions(path);
-								int sample = 1;
-		
-								if (oa.outWidth > MAX_WIDTH * sample) {
-									sample = (oa.outWidth + MAX_WIDTH - 1) / MAX_WIDTH;
-								}
-		
-								if (oa.outHeight > MAX_HEIGHT * sample) {
-									sample = (oa.outHeight + MAX_HEIGHT - 1)
-											/ MAX_HEIGHT;
-								}
-		
-								Options ob = new Options();
-								ob.inSampleSize = 1;
-								while (ob.inSampleSize < sample) {
-									ob.inSampleSize <<= 1;
-								}
-		
-								Bitmap bmp = BitmapFactory.decodeFile(path, ob);
+								Bitmap bmp = BitmapFactory.decodeFile(path);
 								synchronized (bn) {
 									bn.bitmap = bmp;
 								}

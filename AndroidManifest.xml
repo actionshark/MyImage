@@ -28,7 +28,9 @@
 
 		<activity android:name=".activity.LeafActivity" />
 
-		<activity android:name=".activity.DetailActivity">
+		<activity
+			android:name=".activity.DetailActivity"
+			android:hardwareAccelerated="false">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
