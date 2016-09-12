@@ -15,8 +15,9 @@ public class ImageUtil {
 	private static final String[] IMG_SUFFIX = new String[] { ".jpg", ".jpeg",
 			".png", };
 
-	private static final int MAX_WIDTH = 1024;
-	private static final int MAX_HEIGHT = 2048;
+	private static final int THUM_MAX_WIDTH = 1024;
+	private static final int THUM_MAX_HEIGHT = 1024;
+	private static final int MAX_MULTIPLY = 1024 * 1024 * 4;
 
 	private static class BitmapNode {
 		public Bitmap bitmap;
@@ -28,7 +29,7 @@ public class ImageUtil {
 		}
 	}
 
-	private static final int THUM_CACHE_SIZE = 32;
+	private static final int THUM_CACHE_SIZE = 20;
 	@SuppressWarnings("serial")
 	private static final LinkedHashMap<String, BitmapNode> THUM_CACHE =
 			new LinkedHashMap<String, BitmapNode>(THUM_CACHE_SIZE, 0.75f, true) {
@@ -100,12 +101,12 @@ public class ImageUtil {
 								
 							if (selected) {
 								Options options = getOptions(path);
-								int scaleWidth = (options.outWidth + MAX_WIDTH - 1)
-										/ MAX_WIDTH;
-								int scaleHeight = (options.outHeight + MAX_HEIGHT - 1)
-										/ MAX_HEIGHT;
+								int scaleWidth = (options.outWidth + THUM_MAX_WIDTH - 1)
+										/ THUM_MAX_WIDTH;
+								int scaleHeight = (options.outHeight + THUM_MAX_HEIGHT - 1)
+										/ THUM_MAX_HEIGHT;
 								options = new Options();
-								options.inSampleSize = Math.max(scaleWidth, scaleHeight);
+								options.inSampleSize = MathUtil.max(scaleWidth, scaleHeight, 2);
 
 								Bitmap bmp = BitmapFactory.decodeFile(path, options);
 								synchronized (THUM_CACHE) {
@@ -160,7 +161,13 @@ public class ImageUtil {
 							}
 								
 							if (selected) {
-								Bitmap bmp = BitmapFactory.decodeFile(path);
+								Options options = getOptions(path);
+								Options op = new Options();
+								op.inSampleSize = (int) Math.ceil(Math.sqrt((options.outWidth * options.outHeight
+										+ MAX_MULTIPLY - 1) / MAX_MULTIPLY));
+								
+								Bitmap bmp = BitmapFactory.decodeFile(path, op);
+								
 								synchronized (bn) {
 									bn.bitmap = bmp;
 								}
