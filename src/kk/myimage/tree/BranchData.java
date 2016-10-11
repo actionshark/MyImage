@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Bitmap;
-
 import kk.myimage.tree.Spider.SpiderNode;
 import kk.myimage.util.ImageUtil;
 
@@ -59,17 +57,6 @@ public class BranchData extends TreeData {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public synchronized Bitmap getThum() {
-		String path = getThumPath();
-
-		if (path != null) {
-			return ImageUtil.getThum(path);
-		}
-
-		return null;
 	}
 
 	@Override

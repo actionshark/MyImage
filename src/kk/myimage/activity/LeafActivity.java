@@ -15,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import kk.myimage.R;
 import kk.myimage.adapter.DownListAdapter;
 import kk.myimage.adapter.LeafAdapter;
@@ -33,7 +34,6 @@ import kk.myimage.ui.SimpleDialog;
 import kk.myimage.ui.UiMode;
 import kk.myimage.util.AppUtil;
 import kk.myimage.util.Broadcast;
-import kk.myimage.util.ImageUtil;
 import kk.myimage.util.IntentUtil;
 
 public class LeafActivity extends BaseActivity implements UiMode.ICaller,
@@ -415,8 +415,6 @@ public class LeafActivity extends BaseActivity implements UiMode.ICaller,
 				updateMode(false);
 			} else if (Ant.BRO_FINISH.equals(name)) {
 				updateMode(false);
-			} else if (ImageUtil.BRO_THUM_GOT.equals(name)) {
-				updateMode(mAdapter.isVisible((String) data));
 			} else if (Ant.BRO_RECENT_UPDATE.equals(name)) {
 				updateMode(false);
 			}
@@ -438,7 +436,6 @@ public class LeafActivity extends BaseActivity implements UiMode.ICaller,
 
 		Broadcast.addListener(mBroadcast, Ant.BRO_UPDATE, true);
 		Broadcast.addListener(mBroadcast, Ant.BRO_FINISH, true);
-		Broadcast.addListener(mBroadcast, ImageUtil.BRO_THUM_GOT, true);
 
 		if (mIsSpacial) {
 			Broadcast.addListener(mBroadcast, Ant.BRO_RECENT_UPDATE, true);
@@ -451,7 +448,6 @@ public class LeafActivity extends BaseActivity implements UiMode.ICaller,
 
 		Broadcast.removeLsitener(mBroadcast, Ant.BRO_UPDATE);
 		Broadcast.removeLsitener(mBroadcast, Ant.BRO_FINISH);
-		Broadcast.removeLsitener(mBroadcast, ImageUtil.BRO_THUM_GOT);
 		Broadcast.removeLsitener(mBroadcast, Ant.BRO_RECENT_UPDATE);
 	}
 }

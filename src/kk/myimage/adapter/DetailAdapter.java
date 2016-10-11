@@ -3,6 +3,7 @@ package kk.myimage.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
@@ -11,12 +12,14 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import kk.myimage.R;
 
+import kk.myimage.R;
 import kk.myimage.activity.BaseActivity;
 import kk.myimage.tree.LeafData;
 import kk.myimage.ui.DetailView;
 import kk.myimage.ui.UiMode;
+import kk.myimage.util.ImageUtil;
+import kk.myimage.util.ImageUtil.IImageListenner;
 
 public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 	static class ViewHolder {
@@ -125,11 +128,18 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 	}
 
 	private void updateView(View root) {
-		ViewHolder vh = (ViewHolder) root.getTag();
-		LeafData data = vh.data;
+		final ViewHolder vh = (ViewHolder) root.getTag();
+		final LeafData data = vh.data;
 
 		if (mMode == UiMode.Mode.Detail) {
-			vh.image.setBitmap(data.getThum());
+			ImageUtil.getThum(data.getPath(), vh.image.getWidth(), vh.image.getHeight(), new IImageListenner() {
+				@Override
+				public void onImageGot(Bitmap bmp) {
+					if (data.equals(vh.data)) {
+						vh.image.setBitmap(bmp);
+					}
+				}
+			});
 
 			DetailGridAdapter adapter = (DetailGridAdapter) vh.list
 					.getAdapter();
@@ -140,7 +150,14 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 			adapter.notifyDataSetChanged();
 			vh.list.setVisibility(View.VISIBLE);
 		} else {
-			vh.image.setBitmap(data.getImage());
+			ImageUtil.getImage(data.getPath(), new IImageListenner() {
+				@Override
+				public void onImageGot(Bitmap bmp) {
+					if (data.equals(vh.data)) {
+						vh.image.setBitmap(bmp);
+					}
+				}
+			});
 			
 			Matrix matrix = mChanges.get(vh.position);
 			if (matrix != null) {

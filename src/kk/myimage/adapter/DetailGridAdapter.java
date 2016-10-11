@@ -38,7 +38,7 @@ public class DetailGridAdapter extends BaseAdapter {
 
 	public DetailGridAdapter(String path) {
 		File file = new File(path);
-		Options options = ImageUtil.getOptions(path);
+		Options options = ImageUtil.getSize(path);
 
 		mData.add(new DataItem(R.string.detail_name, file.getName()));
 		mData.add(new DataItem(R.string.detail_path, file.getParent()));

@@ -22,6 +22,8 @@ import kk.myimage.activity.BaseActivity;
 import kk.myimage.activity.LeafActivity;
 import kk.myimage.tree.BranchData;
 import kk.myimage.ui.UiMode;
+import kk.myimage.util.ImageUtil;
+import kk.myimage.util.ImageUtil.IImageListenner;
 
 public class BranchAdapter extends BaseAdapter implements UiMode.ICallee {
 	private UiMode.Mode mMode = UiMode.Mode.Normal;
@@ -240,7 +242,7 @@ public class BranchAdapter extends BaseAdapter implements UiMode.ICallee {
 			vh = (ViewHolder) view.getTag();
 		}
 
-		BranchData data = mList.get(index);
+		final BranchData data = mList.get(index);
 
 		vh.name.setText(data.getName());
 		vh.num.setText(data.getChildNum() + "");
@@ -254,11 +256,19 @@ public class BranchAdapter extends BaseAdapter implements UiMode.ICallee {
 			vh.sort.setImageResource(0);
 		}
 
-		Bitmap thum = data.getThum();
-		if (thum != null) {
-			vh.thum.setImageBitmap(thum);
-		} else if (vh.index != index) {
-			vh.thum.setImageBitmap(null);
+		if (data.equals(vh.data) == false || vh.hasImg == false) {
+			vh.hasImg = false;
+			vh.thum.setImageDrawable(null);
+			
+			ImageUtil.getThum(data.getThumPath(), vh.thum.getWidth(), vh.thum.getHeight(), new IImageListenner() {
+				@Override
+				public void onImageGot(Bitmap bmp) {
+					if (data.equals(vh.data)) {
+						vh.hasImg = true;
+						vh.thum.setImageBitmap(bmp);
+					}
+				}
+			});
 		}
 
 		if (mMode == UiMode.Mode.Normal) {
@@ -288,5 +298,6 @@ public class BranchAdapter extends BaseAdapter implements UiMode.ICallee {
 
 		public int index;
 		public BranchData data;
+		public boolean hasImg;
 	}
 }

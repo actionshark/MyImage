@@ -25,6 +25,7 @@ import kk.myimage.tree.BranchData;
 import kk.myimage.tree.LeafData;
 import kk.myimage.ui.UiMode;
 import kk.myimage.util.ImageUtil;
+import kk.myimage.util.ImageUtil.IImageListenner;
 
 public class LeafAdapter extends BaseAdapter implements UiMode.ICallee {
 	private UiMode.Mode mMode = UiMode.Mode.Normal;
@@ -254,13 +255,21 @@ public class LeafAdapter extends BaseAdapter implements UiMode.ICallee {
 			vh = (ViewHolder) view.getTag();
 		}
 
-		LeafData data = mData.getChildren(true).get(index);
+		final LeafData data = mData.getChildren(true).get(index);
 
-		Bitmap thum = data.getThum();
-		if (thum != null) {
-			vh.thum.setImageBitmap(thum);
-		} else if (vh.index != index) {
-			vh.thum.setImageBitmap(null);
+		if (data.equals(vh.data) == false || vh.hasImg == false) {
+			vh.hasImg = false;
+			vh.thum.setImageDrawable(null);
+			
+			ImageUtil.getThum(data.getPath(), vh.thum.getWidth(), vh.thum.getHeight(), new IImageListenner() {
+				@Override
+				public void onImageGot(Bitmap bmp) {
+					if (data.equals(vh.data)) {
+						vh.hasImg = true;
+						vh.thum.setImageBitmap(bmp);
+					}
+				}
+			});
 		}
 
 		if (mMode == UiMode.Mode.Normal) {
@@ -269,7 +278,7 @@ public class LeafAdapter extends BaseAdapter implements UiMode.ICallee {
 		} else {
 			vh.name.setText(data.getName());
 
-			Options options = ImageUtil.getOptions(data.getPath());
+			Options options = ImageUtil.getSize(data.getPath());
 			vh.size.setText(String.format("%d x %d", options.outWidth,
 					options.outHeight));
 
@@ -282,6 +291,7 @@ public class LeafAdapter extends BaseAdapter implements UiMode.ICallee {
 		}
 
 		vh.index = index;
+		vh.data = data;
 
 		mVisible.add(index);
 
@@ -297,5 +307,7 @@ public class LeafAdapter extends BaseAdapter implements UiMode.ICallee {
 		public ImageView select;
 
 		public int index;
+		public LeafData data;
+		public boolean hasImg;
 	}
 }

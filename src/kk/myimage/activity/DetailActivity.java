@@ -36,7 +36,6 @@ import kk.myimage.ui.IDialogClickListener;
 import kk.myimage.ui.SimpleDialog;
 import kk.myimage.ui.UiMode;
 import kk.myimage.util.AppUtil;
-import kk.myimage.util.Broadcast;
 import kk.myimage.util.ImageUtil;
 import kk.myimage.util.IntentUtil;
 import kk.myimage.util.Logger;
@@ -357,17 +356,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		dl.show();
 	}
 
-	private Broadcast.IListener mBroadcast = new Broadcast.IListener() {
-		@Override
-		public void onReceive(String name, Object data) {
-			if (ImageUtil.BRO_IMAGE_GOT.equals(name)) {
-				updateMode(true);
-			} else if (ImageUtil.BRO_THUM_GOT.equals(name)) {
-				updateMode(true);
-			}
-		}
-	};
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -380,9 +368,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 			mAdapter.setChange(mIndex, mMatrix);
 		}
 		updateMode(true);
-
-		Broadcast.addListener(mBroadcast, ImageUtil.BRO_IMAGE_GOT, true);
-		Broadcast.addListener(mBroadcast, ImageUtil.BRO_THUM_GOT, true);
 	}
 
 	@Override
@@ -390,9 +375,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		super.onPause();
 
 		mMatrix = mAdapter.getChange(mIndex);
-		
-		Broadcast.removeLsitener(mBroadcast, ImageUtil.BRO_IMAGE_GOT);
-		Broadcast.removeLsitener(mBroadcast, ImageUtil.BRO_THUM_GOT);
 	}
 
 	private void restart() {

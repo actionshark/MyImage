@@ -16,6 +16,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import kk.myimage.R;
 import kk.myimage.adapter.BranchAdapter;
 import kk.myimage.adapter.DownListAdapter;
@@ -34,7 +35,6 @@ import kk.myimage.ui.SimpleDialog;
 import kk.myimage.ui.UiMode;
 import kk.myimage.util.AppUtil;
 import kk.myimage.util.Broadcast;
-import kk.myimage.util.ImageUtil;
 import kk.myimage.util.Setting;
 
 public class BranchActivity extends BaseActivity implements UiMode.ICaller, UiMode.ICallee {
@@ -400,8 +400,6 @@ public class BranchActivity extends BaseActivity implements UiMode.ICaller, UiMo
 				updateMode(false);
 			} else if (Ant.BRO_FINISH.equals(name)) {
 				updateMode(false);
-			} else if (ImageUtil.BRO_THUM_GOT.equals(name)) {
-				updateMode(mAdapter.isVisible((String) data));
 			}
 		}
 	};
@@ -414,7 +412,6 @@ public class BranchActivity extends BaseActivity implements UiMode.ICaller, UiMo
 
 		Broadcast.addListener(mBroadcast, Ant.BRO_UPDATE, true);
 		Broadcast.addListener(mBroadcast, Ant.BRO_FINISH, true);
-		Broadcast.addListener(mBroadcast, ImageUtil.BRO_THUM_GOT, true);
 	}
 
 	@Override
@@ -423,6 +420,5 @@ public class BranchActivity extends BaseActivity implements UiMode.ICaller, UiMo
 
 		Broadcast.removeLsitener(mBroadcast, Ant.BRO_UPDATE);
 		Broadcast.removeLsitener(mBroadcast, Ant.BRO_FINISH);
-		Broadcast.removeLsitener(mBroadcast, ImageUtil.BRO_THUM_GOT);
 	}
 }

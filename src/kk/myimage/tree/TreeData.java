@@ -2,8 +2,6 @@ package kk.myimage.tree;
 
 import java.io.File;
 
-import android.graphics.Bitmap;
-
 import kk.myimage.tree.Spider.SpiderNode;
 
 public abstract class TreeData implements Cloneable {
@@ -44,8 +42,6 @@ public abstract class TreeData implements Cloneable {
 	public File getFile() {
 		return new File(mPath);
 	}
-
-	public abstract Bitmap getThum();
 
 	public int getSortIndex() {
 		SpiderNode sn = Spider.getNode(mPath);
