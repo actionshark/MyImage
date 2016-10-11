@@ -66,7 +66,8 @@
 		android:layout_weight="1"
 		android:verticalSpacing="@dimen/grid_ver_gap"
 		android:horizontalSpacing="@dimen/grid_hor_gap"
-		android:numColumns="2" />
+		android:numColumns="2"
+		android:fastScrollEnabled="true" />
 
 	<LinearLayout
 		android:id="@+id/ll_menu"
@@ -119,7 +120,7 @@
 			android:background="@drawable/btn_blue_bg"
 			android:scaleType="centerInside"
 			android:src="@drawable/arrow_up" />
-		
+
 		<ImageView
 			android:id="@+id/iv_bottom"
 			android:layout_width="0dp"
