@@ -38,6 +38,8 @@ public class ImageUtil {
 		}
 	}
 	
+	public static final int MAX_MULTIPLY = 1024 * 1024 * 4;
+	
 	private static final String[] IMG_SUFFIX = new String[] { ".jpg", ".jpeg",
 		".png", ".gif", };
 
@@ -50,18 +52,6 @@ public class ImageUtil {
 		@Override
 		protected boolean removeEldestEntry(Entry<String, DrawableNode> eldest) {
 			return size() > THUM_CACHE_SIZE;
-		}
-	};
-
-	private static final int IMAGE_CACHE_SIZE = 4;
-	private static final LinkedHashMap<String, DrawableNode> IMAGE_CACHE =
-			new LinkedHashMap<String, DrawableNode>(IMAGE_CACHE_SIZE, 0.75f, true) {
-		
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected boolean removeEldestEntry(Entry<String, DrawableNode> eldest) {
-			return size() > IMAGE_CACHE_SIZE;
 		}
 	};
 
@@ -87,7 +77,6 @@ public class ImageUtil {
 	}
 
 	private static boolean sIsThumRunning = false;
-	private static boolean sIsImageRunning = false;
 
 	public static void getThum(final String path, final int width, final int height, final IImageListenner listenner) {
 		AppUtil.runOnNewThread(new Runnable() {
@@ -212,97 +201,26 @@ public class ImageUtil {
 	public static void getImage(final String path, final IImageListenner listenner) {
 		AppUtil.runOnNewThread(new Runnable() {
 			public void run() {
-				synchronized (IMAGE_CACHE) {
-					DrawableNode node = IMAGE_CACHE.get(path);
-					
-					if (node != null && node.bmp != null) {
-						if (listenner != null) {
-							final Bitmap bmp = node.bmp;
-							
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									listenner.onImageGot(bmp);
-								}
-							});
-						}
-						
-						return;
-					}
-					
-					if (node == null) {
-						node = new DrawableNode();
-						IMAGE_CACHE.put(path, node);
-					}
-					
-					node.path = path;
-					node.token = SystemClock.elapsedRealtime();
-					node.listenner = listenner;
-					
-					if (sIsImageRunning) {
-						return;
-					}
-					sIsImageRunning = true;
-				}
-				
 				try {
-					while (true) {
-						DrawableNode node = null;
-						
-						synchronized (IMAGE_CACHE) {
-							for (DrawableNode n : IMAGE_CACHE.values()) {
-								if (n.bmp == null) {
-									if (node == null || n.token > node.token) {
-										node = n;
-									}
-								}
+					Options size = new Options();
+					size.inJustDecodeBounds = true;
+					BitmapFactory.decodeFile(path, size);
+					
+					Options op = new Options();
+					op.inSampleSize = (int) Math.sqrt((size.outWidth * size.outHeight
+						+ MAX_MULTIPLY - 1) / MAX_MULTIPLY);
+					
+					final Bitmap bmp = BitmapFactory.decodeFile(path, op);
+					
+					if (listenner != null) {
+						AppUtil.runOnUiThread(new Runnable() {
+							public void run() {
+								listenner.onImageGot(bmp);
 							}
-						}
-						
-						if (node == null) {
-							return;
-						}
-						
-						final DrawableNode nd;
-						synchronized (IMAGE_CACHE) {
-							nd = node.clone();
-						}
-						
-						try {
-							Options size = new Options();
-							size.inJustDecodeBounds = true;
-							BitmapFactory.decodeFile(nd.path, size);
-							
-							Options op = new Options();
-							op.inSampleSize = (int) Math.ceil(Math.sqrt((size.outWidth * size.outHeight
-								+ 1048576 - 1) / 1048576));
-							
-							nd.bmp = BitmapFactory.decodeFile(nd.path, op);
-							synchronized (IMAGE_CACHE) {
-								node.bmp = nd.bmp;
-							}
-						} catch (Exception e) {
-							Logger.print(null, e);
-							
-							nd.bmp = BitmapFactory.decodeResource(AppUtil.getRes(), R.drawable.ic_icon);
-							synchronized (IMAGE_CACHE) {
-								node.bmp = nd.bmp;
-							}
-						}
-						
-						if (nd.listenner != null) {
-							AppUtil.runOnUiThread(new Runnable() {
-								public void run() {
-									nd.listenner.onImageGot(nd.bmp);
-								}
-							});
-						}
+						});
 					}
 				} catch (Exception e) {
 					Logger.print(null, e);
-				} finally {
-					synchronized (IMAGE_CACHE) {
-						sIsImageRunning = false;
-					}
 				}
 			}
 		});
