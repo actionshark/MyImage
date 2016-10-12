@@ -132,29 +132,29 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 		final LeafData data = vh.data;
 
 		if (mMode == UiMode.Mode.Detail) {
-			ImageUtil.getThum(data.getPath(), vh.image.getWidth(), vh.image.getHeight(), new IImageListenner() {
-				@Override
-				public void onImageGot(Bitmap bmp) {
-					if (data.equals(vh.data)) {
-						vh.image.setBitmap(bmp);
-					}
-				}
-			});
-
-			DetailGridAdapter adapter = (DetailGridAdapter) vh.list
-					.getAdapter();
-			if (adapter == null) {
-				adapter = new DetailGridAdapter(data.getPath());
-				vh.list.setAdapter(adapter);
-			}
-			adapter.notifyDataSetChanged();
-			vh.list.setVisibility(View.VISIBLE);
-		} else {
+			vh.image.setVisibility(View.INVISIBLE);
 			ImageUtil.getImage(data.getPath(), new IImageListenner() {
 				@Override
 				public void onImageGot(Bitmap bmp) {
 					if (data.equals(vh.data)) {
 						vh.image.setBitmap(bmp);
+						vh.image.setVisibility(View.VISIBLE);
+					}
+				}
+			});
+
+			DetailGridAdapter adapter = new DetailGridAdapter(data.getPath());
+			vh.list.setAdapter(adapter);
+			adapter.notifyDataSetChanged();
+			vh.list.setVisibility(View.VISIBLE);
+		} else {
+			vh.image.setVisibility(View.INVISIBLE);
+			ImageUtil.getImage(data.getPath(), new IImageListenner() {
+				@Override
+				public void onImageGot(Bitmap bmp) {
+					if (data.equals(vh.data)) {
+						vh.image.setBitmap(bmp);
+						vh.image.setVisibility(View.VISIBLE);
 					}
 				}
 			});
