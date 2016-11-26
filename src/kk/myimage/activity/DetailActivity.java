@@ -48,7 +48,7 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 
 	private DetailAdapter mAdapter;
 	private String mPath;
-	private int mIndex;
+	private int mIndex = -1;
 
 	private ViewGroup mVgTitle;
 	private TextView mTvTitle;
@@ -65,15 +65,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 
 			mStatusBar.setVisibility(View.GONE);
 		}
-
-		BranchData bd = checkData();
-		if (bd == null) {
-			finish();
-			return;
-		}
-		
-		mAdapter = new DetailAdapter();
-		mAdapter.setDataList(bd.getChildren(true));
 
 		setContentView(R.layout.activity_detail);
 
@@ -102,6 +93,7 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 
 		mVpImage = (ViewPager) findViewById(R.id.vp_list);
 
+		mAdapter = new DetailAdapter();
 		mVpImage.setAdapter(mAdapter);
 		mAdapter.setOnClickListener(new OnClickListener() {
 			@Override
@@ -114,7 +106,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 			}
 		});
 
-		mVpImage.setCurrentItem(mIndex);
 		mVpImage.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -307,22 +298,23 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 			return;
 		}
 		
-		mAdapter.setDataList(bd.getChildren(true));
 		if (mMatrix != null) {
 			mAdapter.setChange(mIndex, mMatrix);
 		}
 		
-		updateMode(true);
-		
 		mTvTitle.setText(String.format("%d/%d", mIndex + 1,
 				mAdapter.getCount()));
+		
+		updateMode(true);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		mMatrix = mAdapter.getChange(mIndex);
+		if (mIndex != -1) {
+			mMatrix = mAdapter.getChange(mIndex);
+		}
 	}
 
 	private void restart() {
@@ -345,37 +337,30 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		BranchData bd = null;
 		Intent intent = getIntent();
 		Uri uri = intent.getData();
+		int index = 0;
 
 		if (uri != null) {
 			try {
 				File file = new File(uri.getPath());
-				
-				if (file.exists() == false || file.canRead() == false) {
-					return null;
-				}
-
-				mPath = file.isDirectory() ? file.getAbsolutePath() : file
-						.getParent();
-				mIndex = 0;
+				String path = file.getAbsolutePath();
+				mPath = file.isDirectory() ? path : file.getParent();
 				File dir = new File(mPath);
 
 				bd = new BranchData(dir);
-				synchronized (bd) {
-					List<LeafData> list = bd.getChildren(false);
-					List<SortFactor> lf = Squi.getLeafFactors();
+				List<LeafData> list = bd.getChildren(false);
+				List<SortFactor> lf = Squi.getLeafFactors();
 
-					for (File child : dir.listFiles()) {
-						if (ImageUtil.isImage(child)) {
-							Squi.insert(list, new LeafData(child), lf);
-						}
+				for (File child : dir.listFiles()) {
+					if (ImageUtil.isImage(child)) {
+						Squi.insert(list, new LeafData(child), lf);
 					}
+				}
 
-					String path = file.getAbsolutePath();
+				if (mIndex == -1) {
 					int len = list.size();
-
 					for (int i = 0; i < len; i++) {
 						if (list.get(i).getPath().equals(path)) {
-							mIndex = i;
+							index = i;
 							break;
 						}
 					}
@@ -389,7 +374,7 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 			}
 		} else {
 			mPath = intent.getStringExtra(KEY_PATH);
-			mIndex = intent.getIntExtra(KEY_INDEX, 0);
+			index = intent.getIntExtra(KEY_INDEX, 0);
 			
 			float[] values = intent.getFloatArrayExtra(KEY_CHANGE);
 			if (values != null) {
@@ -400,8 +385,14 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 			bd = Ant.getData(mPath);
 		}
 
-		if (bd == null || mIndex < 0 || mIndex >= bd.getChildNum()) {
+		if (bd == null) {
 			return null;
+		}
+
+		mAdapter.setDataList(bd.getChildren(true));
+		if (mIndex == -1) {
+			mIndex = index;
+			mVpImage.setCurrentItem(mIndex);
 		}
 		
 		return bd;

@@ -176,13 +176,13 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 
 	@Override
 	public void onModeUpdate(boolean force) {
-		notifyDataSetChanged();
-
 		for (View root : mViewList) {
 			if (root.getParent() != null) {
 				updateView(root);
 			}
 		}
+		
+		notifyDataSetChanged();
 	}
 	
 	public Matrix getChange(int position) {
