@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">我的图片</string>
+	<string name="app_name">图片</string>
 
 	<string name="ok">确定</string>
 	<string name="cancel">取消</string>
