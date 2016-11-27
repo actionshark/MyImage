@@ -9,12 +9,12 @@ import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import kk.myimage.R;
 import kk.myimage.activity.BaseActivity;
+import kk.myimage.activity.DetailActivity;
 import kk.myimage.tree.LeafData;
 import kk.myimage.ui.DetailView;
 import kk.myimage.ui.UiMode;
@@ -29,18 +29,17 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 		public LeafData data;
 		public int position;
 	}
-
-	private List<LeafData> mDataList;
-	private final List<View> mViewList = new ArrayList<View>();
-
-	private UiMode.Mode mMode = UiMode.Mode.Normal;
-
-	private OnClickListener mClickListener;
-	private OnLongClickListener mLongClickListener;
 	
+	private final DetailActivity mActivity;
+	private UiMode.Mode mMode = UiMode.Mode.Normal;
+	private List<LeafData> mDataList;
+	
+	private final List<View> mViewList = new ArrayList<View>();
 	private final SparseArray<Matrix> mChanges = new SparseArray<Matrix>();
 
-	public DetailAdapter() {
+	public DetailAdapter(DetailActivity activity) {
+		mActivity = activity;
+		
 		for (int i = 0; i < 5; i++) {
 			View root = BaseActivity.ca().getLayoutInflater()
 					.inflate(R.layout.grid_detail, null);
@@ -50,19 +49,11 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 			holder.image.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					if (mClickListener != null) {
-						mClickListener.onClick(view);
+					if (mMode == UiMode.Mode.Normal) {
+						mActivity.changeMode(UiMode.Mode.Detail);
+					} else {
+						mActivity.changeMode(UiMode.Mode.Normal);
 					}
-				}
-			});
-			holder.image.setOnLongClickListener(new OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View view) {
-					if (mLongClickListener != null) {
-						return mLongClickListener.onLongClick(view);
-					}
-
-					return false;
 				}
 			});
 
@@ -79,14 +70,6 @@ public class DetailAdapter extends PagerAdapter implements UiMode.ICallee {
 
 	public List<LeafData> getDataList() {
 		return mDataList;
-	}
-
-	public void setOnClickListener(OnClickListener listener) {
-		mClickListener = listener;
-	}
-
-	public void setOnLongClickListener(OnLongClickListener listener) {
-		mLongClickListener = listener;
 	}
 
 	@Override

@@ -27,16 +27,13 @@ import kk.myimage.tree.BranchData;
 import kk.myimage.tree.LeafData;
 import kk.myimage.tree.Spider;
 import kk.myimage.tree.Spider.SpiderNode;
-import kk.myimage.tree.Squi;
 import kk.myimage.tree.Worm;
-import kk.myimage.tree.Squi.SortFactor;
 import kk.myimage.tree.Worm.IFinishcallback;
 import kk.myimage.ui.DownList;
 import kk.myimage.ui.IDialogClickListener;
 import kk.myimage.ui.SimpleDialog;
 import kk.myimage.ui.UiMode;
 import kk.myimage.util.AppUtil;
-import kk.myimage.util.ImageUtil;
 import kk.myimage.util.IntentUtil;
 import kk.myimage.util.Logger;
 import kk.myimage.util.Setting;
@@ -45,10 +42,11 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 	public static final String KEY_CHANGE = "key_change";
 	
 	private UiMode.Mode mMode = UiMode.Mode.Normal;
-
 	private DetailAdapter mAdapter;
+
+	private String mDir;
 	private String mPath;
-	private int mIndex = -1;
+	private int mIndex;
 
 	private ViewGroup mVgTitle;
 	private TextView mTvTitle;
@@ -62,7 +60,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		if (Setting.getShowStatus() == false) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 			mStatusBar.setVisibility(View.GONE);
 		}
 
@@ -71,7 +68,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		mVgTitle = (ViewGroup) findViewById(R.id.rl_title);
 		mVgTitle.setVisibility(Setting.getShowTitle() ? View.VISIBLE
 				: View.GONE);
-
 		mVgTitle.findViewById(R.id.iv_back).setOnClickListener(
 				new OnClickListener() {
 					@Override
@@ -80,9 +76,7 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 					}
 				});
 
-		mTvTitle = (TextView) mVgTitle
-				.findViewById(R.id.tv_title);
-
+		mTvTitle = (TextView) mVgTitle.findViewById(R.id.tv_title);
 		mVgTitle.findViewById(R.id.iv_menu).setOnClickListener(
 				new OnClickListener() {
 					@Override
@@ -91,21 +85,9 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 					}
 				});
 
+		mAdapter = new DetailAdapter(this);
 		mVpImage = (ViewPager) findViewById(R.id.vp_list);
-
-		mAdapter = new DetailAdapter();
 		mVpImage.setAdapter(mAdapter);
-		mAdapter.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (mMode == UiMode.Mode.Normal) {
-					changeMode(UiMode.Mode.Detail);
-				} else {
-					changeMode(UiMode.Mode.Normal);
-				}
-			}
-		});
-
 		mVpImage.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -123,6 +105,11 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
+
+		if (checkData() == false) {
+			finish();
+			return;
+		}
 		
 		int mode = getIntent().getIntExtra(KEY_MODE, UiMode.Mode.Normal.ordinal());
 		mMode = UiMode.Mode.values()[mode];
@@ -200,7 +187,7 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 											new IFinishcallback() {
 												@Override
 												public void onFinish() {
-													Ant.addUpdate(mPath);
+													Ant.addUpdate(mDir);
 												}
 											});
 
@@ -214,14 +201,14 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 					}
 				}));
 
-		SpiderNode sn = Spider.getNode(mPath);
+		SpiderNode sn = Spider.getNode(mDir);
 		String name = mAdapter.getDataList().get(mIndex).getName();
 		dataList.add(new DataItem(R.drawable.cover, sn != null
 				&& name.equals(sn.thum) ? R.string.not_as_cover
 				: R.string.set_as_cover, new IDialogClickListener() {
 			@Override
 			public void onClick(Dialog dialog, int index) {
-				SpiderNode sn = Spider.getNode(mPath);
+				SpiderNode sn = Spider.getNode(mDir);
 				if (sn == null) {
 					sn = new SpiderNode();
 				}
@@ -233,7 +220,7 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 					sn.thum = name;
 				}
 
-				Spider.setNode(mPath, sn);
+				Spider.setNode(mDir, sn);
 			}
 		}));
 
@@ -291,12 +278,6 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		BranchData bd = checkData();
-		if (bd == null) {
-			finish();
-			return;
-		}
 		
 		if (mMatrix != null) {
 			mAdapter.setChange(mIndex, mMatrix);
@@ -312,14 +293,12 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 	protected void onPause() {
 		super.onPause();
 
-		if (mIndex != -1) {
-			mMatrix = mAdapter.getChange(mIndex);
-		}
+		mMatrix = mAdapter.getChange(mIndex);
 	}
 
 	private void restart() {
 		Intent intent = new Intent(BaseActivity.ca(), DetailActivity.class);
-		intent.putExtra(KEY_PATH, mPath);
+		intent.putExtra(KEY_PATH, mDir);
 		intent.putExtra(KEY_INDEX, mIndex);
 		intent.putExtra(KEY_MODE, mMode.ordinal());
 		
@@ -333,48 +312,31 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		finish();
 	}
 	
-	private BranchData checkData() {
-		BranchData bd = null;
+	private boolean checkData() {
 		Intent intent = getIntent();
-		Uri uri = intent.getData();
-		int index = 0;
+		final Uri uri = intent.getData();
 
 		if (uri != null) {
 			try {
 				File file = new File(uri.getPath());
-				String path = file.getAbsolutePath();
-				mPath = file.isDirectory() ? path : file.getParent();
-				File dir = new File(mPath);
-
-				bd = new BranchData(dir);
-				List<LeafData> list = bd.getChildren(false);
-				List<SortFactor> lf = Squi.getLeafFactors();
-
-				for (File child : dir.listFiles()) {
-					if (ImageUtil.isImage(child)) {
-						Squi.insert(list, new LeafData(child), lf);
-					}
-				}
-
-				if (mIndex == -1) {
-					int len = list.size();
-					for (int i = 0; i < len; i++) {
-						if (list.get(i).getPath().equals(path)) {
-							index = i;
-							break;
-						}
-					}
-				}
-
-				Ant.refresh(false, true);
+				mPath = file.getAbsolutePath();
+				mDir = file.isDirectory() ? mPath : file.getParent();
+				mIndex = 0;
+				
+				List<LeafData> list = new ArrayList<LeafData>();
+				list.add(new LeafData(file));
+				mAdapter.setDataList(list);
+				mVpImage.setCurrentItem(mIndex);
 			} catch (Exception e) {
 				Logger.print(null, e);
 
-				return null;
+				return false;
 			}
+			
+			return true;
 		} else {
-			mPath = intent.getStringExtra(KEY_PATH);
-			index = intent.getIntExtra(KEY_INDEX, 0);
+			mDir = intent.getStringExtra(KEY_PATH);
+			mIndex = intent.getIntExtra(KEY_INDEX, 0);
 			
 			float[] values = intent.getFloatArrayExtra(KEY_CHANGE);
 			if (values != null) {
@@ -382,19 +344,15 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 				mMatrix.setValues(values);
 			}
 
-			bd = Ant.getData(mPath);
-		}
-
-		if (bd == null) {
-			return null;
-		}
-
-		mAdapter.setDataList(bd.getChildren(true));
-		if (mIndex == -1) {
-			mIndex = index;
+			BranchData bd = Ant.getData(mDir);
+			if (bd == null) {
+				return false;
+			}
+			
+			mAdapter.setDataList(bd.getChildren(true));
 			mVpImage.setCurrentItem(mIndex);
+			
+			return true;
 		}
-		
-		return bd;
 	}
 }
