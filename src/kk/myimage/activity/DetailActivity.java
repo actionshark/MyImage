@@ -60,7 +60,10 @@ public class DetailActivity extends BaseActivity implements UiMode.ICaller {
 		if (Setting.getShowStatus() == false) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			mStatusBar.setVisibility(View.GONE);
+			
+			if (mStatusBar != null) {
+				mStatusBar.setVisibility(View.GONE);
+			}
 		}
 
 		setContentView(R.layout.activity_detail);
